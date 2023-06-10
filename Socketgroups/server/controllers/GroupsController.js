@@ -1,40 +1,52 @@
 import { Auth0Provider } from "@bcwdev/auth0provider";
 import { groupsService } from "../services/GroupsService.js";
 import BaseController from "../utils/BaseController.js";
+import { chatsService } from "../services/ChatsService.js";
 
 
 export class GroupsController extends BaseController {
     constructor() {
         super('api/groups')
         this.router
-            .get("", this.GetGroups)
-            .get("/:id", this.GetOne)
+            .get("", this.getGroups)
+            .get("/:id", this.getOne)
+            .get("/:id/chats", this.getChats)
             .use(Auth0Provider.getAuthorizedUserInfo)
-            .post("", this.CreateGroup)
+            .post("", this.createGroup)
     }
-    async GetOne(req, res, next) {
+    async getChats(req, res, next) {
         try {
             let groupId = req.params.id
-            let group = await groupsService.GetOne(groupId)
+            let chats = await chatsService.getChats(groupId)
+            res.send(chats)
+        } catch (error) {
+            next(error)
+
+        }
+    }
+    async getOne(req, res, next) {
+        try {
+            let groupId = req.params.id
+            let group = await groupsService.getOne(groupId)
             res.send(group)
         } catch (error) {
             next(error)
         }
     }
-    async GetGroups(req, res, next) {
+    async getGroups(req, res, next) {
         try {
-            let groups = await groupsService.GetGroups()
+            let groups = await groupsService.getGroups()
             res.send(groups)
         } catch (error) {
             next(error)
         }
     }
-    async CreateGroup(req, res, next) {
+    async createGroup(req, res, next) {
         try {
             let gData = req.body
             let userId = req.userInfo.id
             gData.creatorId = userId
-            let group = await groupsService.CreateGroup(gData)
+            let group = await groupsService.createGroup(gData)
             res.send(group)
         } catch (error) {
             next(error)
