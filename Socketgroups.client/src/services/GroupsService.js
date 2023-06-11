@@ -13,6 +13,12 @@ class GroupsService {
         logger.log(AppState.groups)
     }
 
+    async GetGroup(groupId) {
+        const res = await api.get(`api/groups/${groupId}`)
+        logger.log(res.data)
+        AppState.activeGroup = new Group(res.data)
+    }
+
 }
 
 export const groupsService = new GroupsService()

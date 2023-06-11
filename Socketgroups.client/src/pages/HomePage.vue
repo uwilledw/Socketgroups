@@ -3,9 +3,9 @@
     <section class="row">
       <div class="col-3"></div>
       <div class="col-9">
-        <section class="row">
-          <div class="col-10">
-            groups
+        <section class="row justify-content-center">
+          <div v-for="g in groups" :key="g.id" class="col-md-10">
+            <GroupCard :group="g" />
           </div>
         </section>
       </div>
@@ -16,8 +16,9 @@
 <script>
 import Pop from '../utils/Pop.js';
 import { groupsService } from '../services/GroupsService.js'
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { logger } from '../utils/Logger.js';
+import { AppState } from '../AppState.js';
 
 export default {
   setup() {
@@ -34,7 +35,10 @@ export default {
       getGroups()
       logger.log('test')
     })
-    return {}
+    return {
+
+      groups: computed(() => AppState.groups)
+    }
   }
 }
 </script>
