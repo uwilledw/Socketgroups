@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <section class="row">
       <div class="col-3"></div>
-      <div class="col-9">
+      <div class="col-9 my-3">
         <section class="row justify-content-center">
           <div v-for="g in groups" :key="g.id" class="col-md-10">
             <GroupCard :group="g" />

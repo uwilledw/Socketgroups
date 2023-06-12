@@ -11,8 +11,8 @@
                 <img class="profile-img me-4" :src="c.creator.picture" alt="">
                 <p class="m-0 text-light">{{ c.body }}</p>
             </div>
-            <div class="col-8">
-                <form @submit.prevent="createChat()">
+            <div class="col-8 my-4">
+                <form @keydown.enter.prevent="createChat()">
                     <div class="input-group mb-3">
                         <!-- <label for="comment">Make a comment</label> -->
                         <input name="body" id="body" v-model="editable.body" class="form-control" required type="textarea">
@@ -26,16 +26,19 @@
 
 
 <script>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Pop from '../utils/Pop.js';
 import { groupsService } from '../services/GroupsService.js';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import { AppState } from '../AppState.js';
 import { chatsService } from '../services/ChatsService.js'
+import { socketService } from '../services/SocketService';
+
 
 export default {
     setup() {
         let route = useRoute()
+        let router = useRouter()
         const editable = ref({})
         async function GetGroup() {
             try {
@@ -50,6 +53,27 @@ export default {
             try {
                 let groupId = route.params.groupId
                 await chatsService.GetChats(groupId)
+            } catch (error) {
+                Pop.error(error.message)
+            }
+        }
+
+        watchEffect(() => {
+            route.params.id
+            GetChats()
+            joiningRoom()
+        })
+
+        router.beforeEach((to, from) => {
+            if (from.name == "Group") {
+                leaveRoom(from.params.id)
+            }
+        })
+
+        function joiningRoom() {
+            try {
+                let payload = { groupName: route.params.groupId }
+                socketService.emit("c:joining:room", payload)
             } catch (error) {
                 Pop.error(error.message)
             }

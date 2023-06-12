@@ -1,7 +1,7 @@
 <template>
     <router-link :to="{ name: 'GroupDetails', params: { groupId: group.id } }">
-        <div class="rounded bg-dark text-light" v-if="group">
-            <img class="group-img" :src="group.image" alt="">
+        <div class="rounded bg-dark text-light selectable" v-if="group">
+            <img class="group-img rounded" :src="group.image" alt="">
             <h1 class="text-center">{{ group.title }}</h1>
         </div>
     </router-link>
