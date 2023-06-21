@@ -13,5 +13,25 @@ export const AppState = reactive({
   activeGroup: null,
 
   /** @type {import('./models/Chat.js').Chat[]} */
-  chats: []
+  chats: [],
+
+  pokemonArray: [
+    {
+      id: 1,
+      name: "Bulbasaur",
+      types: ["grass", "water"],
+      sprite: "https://pokemon.com/pictures/bulbasaur.png"
+    },
+    {
+      id: 1,
+      name: "Char",
+      types: ["fire"],
+      sprite: "https://pokemon.com/pictures/bulbasaur.png"
+    },
+    {
+      id: 1,
+      name: "diglet",
+      types: ["grass", "fire"],
+      sprite: "https://pokemon.com/pictures/bulbasaur.png"
+    },]
 })
